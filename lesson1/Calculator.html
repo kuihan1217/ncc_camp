@@ -238,7 +238,7 @@
         } else if (key === '%') {
           keyPressPercent();
         } else if (key === 'CE') {
-          if (ob.expArr.includes('=') || ob.currValue === INVALID_RESULT) {
+          if (ob.expArr.includes('=')) {
             ob.reset();
           } else {
             ob.currValue = '0';
