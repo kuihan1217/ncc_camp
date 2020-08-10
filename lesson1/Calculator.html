@@ -1,395 +1,432 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <title> 计算器 </title>
-  <meta charset="utf-8" />
+  <meta charset="utf-8"/>
   <style>
-    #gridPanel {
-      background-color: #ebeaea;
-      width: 1100px;
-      height: 700px;
-    }
+  #gridPanel {
+    background-color: #ebeaea;
+    width: 1100px;
+    height: 700px;
+  }
 
-    #left-area {
-      width: 800px;
-      float: left;
-      height: 700px;
-    }
+  #left-area {
+    width: 800px;
+    float: left;
+    height: 700px;
+  }
 
-    #right-area {
-      width: 295px;
-      float: right;
-      height: 700px;
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
+  #right-area {
+    width: 295px;
+    float: right;
+    height: 700px;
+  }
 
-    #tilte-input {
-      width: 100%;
-      height: 200px;
-    }
+  #tilte-input {
+    width: 100%;
+    height: 200px;
+  }
 
-    .expression {
-      font-size: 14px;
-      color: #333333;
-      width: 100%;
-      height: 20px;
-      padding-top: 50px;
-      text-align: right;
-    }
+  .expression {
+    font-size: 14px;
+    color: #333333;
+    width: 100%;
+    height: 20px;
+    padding-top: 50px;
+    text-align: right;
+  }
 
-    .current {
-      font-size: 40px;
-      font-weight: bold;
-      color: #000;
-      width: 100%;
-      height: 120px;
-      text-align: right;
-    }
+  .current {
+    font-size: 40px;
+    font-weight: bold;
+    color: #000;
+    width: 100%;
+    height: 120px;
+    text-align: right;
+  }
 
-    #button-area {
-      width: 100%;
-      height: 500px;
-    }
+  #button-area {
+    width: 100%;
+    height: 500px;
+  }
 
-    #button-area .button {
-      width: 200px;
-      float: left;
-      height: 100px;
-      background-color: white;
-      font-size: 38px;
-      line-height: 100px;
-      text-align: center;
-      cursor: pointer;
-      user-select: none;
-    }
+  #button-area .button {
+    width: 200px;
+    float: left;
+    height: 100px;
+    background-color: white;
+    font-size: 38px;
+    line-height: 100px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+  }
 
-    #button-area .button:hover {
-      background-color: #d6d6d6;
-    }
+  #button-area .button:hover {
+    background-color: #d6d6d6;
+  }
 
-    .history-title {
-      margin-top: 10px;
-      margin-left: 10px;
-      font-size: 20px;
-      font-weight: bold;
-      border-bottom: 5px solid #0078D7;
-      width: 80px;
-    }
+  .history-title {
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 5px solid #0078D7;
+    width: 80px;
+  }
 
-    .history-list {
-      width: 100%;
-      margin-top: 10px;
-    }
+  .history-list {
+    width: 100%;
+    margin-top: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 648px;
+  }
 
-    .history-expression {
-      width: 100%;
-      font-size: 12px;
-      color: #333333;
-      text-align: right;
-    }
+  .history-expression {
+    width: 100%;
+    font-size: 12px;
+    color: #333333;
+    text-align: right;
+    word-break: break-all;
+  }
 
-    .history-result {
-      width: 100%;
-      color: #000;
-      text-align: right;
-      font-size: 24px;
-      font-weight: bold;
-    }
+  .history-result {
+    width: 100%;
+    color: #000;
+    text-align: right;
+    font-size: 24px;
+    font-weight: bold;
+  }
   </style>
 </head>
 
 <body>
-  <div id="gridPanel">
-    <div id="left-area">
-      <div id="tilte-input">
-        <div class="expression"></div>
-        <div class="current">0</div>
-      </div>
-      <div id="button-area">
-        <div class="button" data-key="%">%</div>
-        <div class="button" data-key="CE">CE</div>
-        <div class="button" data-key="C">C</div>
-        <div class="button" data-key="÷">÷</div>
-        <div class="button" data-key="7">7</div>
-        <div class="button" data-key="8">8</div>
-        <div class="button" data-key="9">9</div>
-        <div class="button" data-key="x">x</div>
-        <div class="button" data-key="4">4</div>
-        <div class="button" data-key="5">5</div>
-        <div class="button" data-key="6">6</div>
-        <div class="button" data-key="-">-</div>
-        <div class="button" data-key="1">1</div>
-        <div class="button" data-key="2">2</div>
-        <div class="button" data-key="3">3</div>
-        <div class="button" data-key="+">+</div>
-        <div class="button" data-key="±">±</div>
-        <div class="button" data-key="0">0</div>
-        <div class="button" data-key=".">.</div>
-        <div class="button" data-key="=">=</div>
-      </div>
+<div id="gridPanel">
+  <div id="left-area">
+    <div id="tilte-input">
+      <div class="expression"></div>
+      <div class="current">0</div>
     </div>
-    <div id="right-area">
-      <div class="history-title">历史记录</div>
-      <div class="history-list"></div>
-    </div>
+    <div id="button-area"></div>
   </div>
+  <div id="right-area">
+    <div class="history-title">历史记录</div>
+    <div class="history-list"></div>
+  </div>
+</div>
 
-  <script type="text/javascript">
+<script type="text/javascript">
 
-    // 最后一次操作内容
-    let lastKey;
-    // 加减乘除求余正在表达式
-    const operatorRegExp = /[+\-x÷]/;
-    const numRegExp = /[0-9.]/;
-    const INVALID_RESULT = 'invalid result';
-    const historyListElem = document.querySelector('.history-list');
-    // 简单的数据监听
-    const ob = (() => {
-      // 表达式对应的dom元素
-      const _expElem = document.querySelector('.expression');
-      // 当前值对应的dom元素
-      const _currElem = document.querySelector('.current');
-      // 表达式对应的数组
-      const _expArr = [];
+// 最后一次操作内容
+let lastKey;
+// 加减乘除求余正在表达式
+const operatorRegExp = /[+\-x÷]/;
+const numRegExp = /[0-9.]/;
+const INVALID_RESULT = 'invalid result';
+
+// 简单的侦听功能
+const ob = (() => {
+  const currValue = Symbol('currValue');
+  const expArr = Symbol('expArr');
+  // 表达式对应的dom元素
+  const _expElem = document.querySelector('.expression');
+  // 当前值对应的dom元素
+  const _currElem = document.querySelector('.current');
+  return new class {
+    constructor() {
+      // 计算值
+      this[currValue] = '';
+      this.calcValue = '';
+      this[expArr] = [];
       // 侦听pop和push方法
       ['pop', 'push', 'splice'].forEach((key) => {
-        _expArr[key] = (...args) => {
-          Array.prototype[key].apply(_expArr, args);
-          _expElem.innerHTML = _expArr.join('');
+        this[expArr][key] = (...args) => {
+          Array.prototype[key].apply(this[expArr], args);
+          _expElem.innerHTML = this[expArr].join('');
         };
       });
-      _expArr.clear = () => {
-        _expArr.length = 0;
+      this[expArr].clear = () => {
+        this[expArr].length = 0;
         _expElem.innerHTML = '';
       };
-      // 当前值的string
-      let _currValue = '';
-      const _ob = Object.defineProperties({}, {
-        calcValue: {
-          value: '',
-          configurable: false,
-          writable: true,
-          enumerable: true,
-        },
-        expArr: {
-          value: _expArr,
-          configurable: false,
-          writable: false,
-          enumerable: true,
-        },
-        currValue: {
-          get() {
-            return _currValue;
-          },
-          set(val) {
-            if (val !== _currValue) {
-              _currValue = val;
-              _currElem.innerHTML = _currValue || '0';
-            }
-          },
-          configurable: false,
-          enumerable: true,
-        },
-      });
-      _ob.reset = () => {
-        _expArr.clear();
-        _ob.currValue = '';
-        _ob.calcValue = '';
-      };
-      return _ob;
-    })();
-    // 采用事件委托的方式
-    document.getElementById('button-area').addEventListener('click', (e) => {
-      // 事件对象元素
-      let tar = e.target;
-      // 只处理button
-      if (tar.classList.contains('button')) {
-        // 获取每个button的key定义
-        let key = tar.dataset.key;
-        // 根据key分别处理，模拟win10 1909版本自带的计算器处理结果
-        // 出现异常计算结果时
-        if (ob.currValue === INVALID_RESULT) {
-          // 只有以下按键可以生效
-          if (/^([0-9.C]|CE)$/.test(key)) {
-            ob.reset();
-          } else {
-            return;
-          }
-        }
-        if (numRegExp.test(key)) {
-          // 处理数字按钮
-          keyPressNum(key);
-        } else if (operatorRegExp.test(key)) {
-          // 处理加减乘数操作
-          keyPressOperator(key);
-        } else if (key === 'C') {//重置键
-          ob.reset();
-        } else if (key === '=') {//=键
-          keyPressEquals();
-        } else if (key === '±') {
-          // 处理 正负 按键
-          if (ob.currValue.startsWith('-')) {
-            ob.currValue = ob.currValue.slice(1);
-          } else if (ob.currValue && ob.currValue !== '0') {
-            ob.currValue = '-' + ob.currValue;
-          }
-        } else if (key === '%') {
-          keyPressPercent();
-        } else if (key === 'CE') {
-          if (ob.expArr.includes('=')) {
-            ob.reset();
-          } else {
-            ob.currValue = '0';
-          }
-        }
-        // 处理完毕，缓存本次按钮
-        lastKey = (key === 'CE') ? '0' : key;
-      }
-    });
+    }
 
-    // 处理数值
-    const keyPressNum = (key) => {
-      // 如果上一次是求值、加减乘除、%操作
-      let tempValue = /[+\-x÷%=]/.test(lastKey) || ob.currValue === '0' ? key : ob.currValue + key;
-      // 如果上一次是%操作，则从expArr弹出最后一个元素，这里是模拟win10计算器的操作
-      if (lastKey === '%') {
-        ob.expArr.pop();
-      }
-      // 小数点默认补齐为0.
-      if (tempValue === '.') {
-        tempValue = '0.';
-      }
-      // 如果拼接后的字符是合法的数值，那就赋值
-      if (/^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/.test(tempValue)) {
-        ob.currValue = tempValue;
-      }
-    };
-    //处理加减乘除
-    const keyPressOperator = (key) => {
-      if (operatorRegExp.test(lastKey)) {
-        if (lastKey !== key) {//不同的时候才需要替换
-          ob.expArr.pop();
-          ob.expArr.push(key);
-        }
-      } else {
-        // 如果已经按过等号按键了，需要重置
-        if (ob.expArr.includes('=')) {
-          ob.expArr.clear();
-          ob.calcValue = '';
-        }
-        // 以小数点结尾的，删除小数点
-        if (ob.currValue.endsWith('.')) {
-          ob.currValue = ob.currValue.slice(0, -1);
-        }
-        // 将当前显示值和操作符压入表达式数组
-        // 按%键时，已经将currValue压入expArr了，所以这里不用在压入了
-        (lastKey !== '%') && ob.expArr.push(ob.currValue || '0');
-        // 尝试计算结果
-        doEval();
-        ob.expArr.push(key);
-      }
-    };
-    // 处理等号按键
-    const keyPressEquals = () => {
-      const len = ob.expArr.length;
-      // 处理直接=号开始的情况，或者9=9这种特殊情况
-      if (len === 0 || ob.expArr[1] === '=') {
-        ob.expArr.clear();
-        if (ob.currValue && ob.currValue.endsWith('.')) {
-          ob.currValue = ob.currValue.slice(0, -1);
-        }
-        ob.expArr.push(ob.currValue || '0');
-      } else if (ob.expArr.includes('=')) {
-        //如果已经按过=号键了,expArr是['x1','*','x2','=']这样的结构
-        let lastOper = ob.expArr[len - 3];//上次计算的运算符
-        let lastNum = ob.expArr[len - 2];// 上次计算的右侧数值
-        ob.expArr.clear();
-        ob.calcValue = '';
-        // 重新压入expArr
-        ob.expArr.push(ob.currValue || '0', lastOper, lastNum);
-        doEval();
-      } else {
-        // 直接将当前显示的值压入expArr，然后计算，并添加=
-        // 按%键时，已经将currValue压入expArr了，所以这里不用在压入了
-        (lastKey !== '%') && ob.expArr.push(ob.currValue || '0');
-        doEval();
-      }
-      ob.expArr.push('=');
-      let div1 = document.createElement('div');
-      div1.classList.add('history-expression');
-      div1.innerHTML = ob.expArr.join('');
-      let div2 = document.createElement('div');
-      div2.classList.add('history-result');
-      div2.innerHTML = ob.currValue;
-      historyListElem.insertBefore(div2, historyListElem.firstElementChild);
-      historyListElem.insertBefore(div1, historyListElem.firstElementChild);
-    };
+    getCurrValue() {
+      return this[currValue];
+    }
 
-    /**
-     * 按下%键
-     */
-    const keyPressPercent = () => {
-      const len = ob.expArr.length;
-      // 处理%操作
-      if (len === 0) {
-        ob.reset();
-      } else if (lastKey === '%' || lastKey === '=') {
-        // 按过=键或%之后
-        ob.currValue = String(Number(ob.currValue) * 0.01);
-        ob.expArr.clear();
-        ob.expArr.push(ob.currValue);
-      } else {
-        let oper = ob.expArr[len - 1];
-        if (oper === '+' || oper === '-') {
-          ob.currValue = String(Number(ob.expArr[len - 2]) * Number(ob.currValue) * 0.01);
-        } else {
-          ob.currValue = String(Number(ob.currValue) * 0.01);
-        }
-        ob.expArr.push(ob.currValue);
-      }
-    };
-
-    /**
-     * 尝试计算expArr压入的数据
-     */
-    function doEval() {
-      const len = ob.expArr.length;
-      // 如果压入操作数组的元素超过3个
-      // 最根本的原则，就是获取表达式数组最后3个元素，进行计算
-      if (len >= 3) {
-        let op1 = Number(ob.expArr[len - 3]);
-        let oper = ob.expArr[len - 2];
-        let op2 = Number(ob.expArr[len - 1]);
-        // 如果上次计算的结果是number类型
-        if (typeof ob.calcValue === 'number') {
-          op1 = ob.calcValue;
-        }
-        switch (oper) {
-          case '-':
-            ob.calcValue = op1 - op2;
-            break;
-          case '+':
-            ob.calcValue = op1 + op2;
-            break;
-          case 'x':
-            ob.calcValue = op1 * op2;
-            break;
-          case '÷':
-            ob.calcValue = op1 / op2;
-            break;
-          default:
-            return;
-        }
-        if (isFinite(ob.calcValue)) {
-          ob.currValue = String(ob.calcValue);
-        } else {
-          ob.currValue = INVALID_RESULT;
-        }
+    setCurrValue(val) {
+      if (val !== this[currValue]) {
+        this[currValue] = val;
+        _currElem.innerHTML = this[currValue] || '0';
       }
     }
-  </script>
+
+    getExpArr() {
+      return this[expArr];
+    }
+
+    reset() {
+      this[expArr].clear();
+      this.calcValue = '';
+      this.setCurrValue('');
+    }
+  };
+})();
+
+class MyButton {
+  constructor(key) {
+    this.key = key;
+  }
+
+  onKeyClick() {
+    // 上次计算结果是无效数据时
+    if (ob.getCurrValue() === INVALID_RESULT) {
+      // 只有以下按键可以生效
+      if (/^([0-9.C]|CE)$/.test(this.key)) {
+        ob.reset();
+      }
+    } else {
+      this.keyPress();
+      // 处理完毕，缓存本次按钮
+      lastKey = (this.key === 'CE') ? '0' : this.key;
+    }
+  }
+
+  keyPress() {
+    console.log('myButton');
+  }
+
+  //尝试计算expArr压入的数据
+  doEval() {
+    const arr = ob.getExpArr();
+    const len = arr.length;
+    // 如果压入操作数组的元素超过3个
+    // 最根本的原则，就是获取表达式数组最后3个元素，进行计算
+    if (len >= 3) {
+      let op1 = Number(arr[len - 3]);
+      let oper = arr[len - 2];
+      let op2 = Number(arr[len - 1]);
+      // 如果上次计算的结果是number类型
+      if (typeof ob.calcValue === 'number') {
+        op1 = ob.calcValue;
+      }
+      switch (oper) {
+        case '-':
+          ob.calcValue = op1 - op2;
+          break;
+        case '+':
+          ob.calcValue = op1 + op2;
+          break;
+        case 'x':
+          ob.calcValue = op1 * op2;
+          break;
+        case '÷':
+          ob.calcValue = op1 / op2;
+          break;
+        default:
+          return;
+      }
+      if (isFinite(ob.calcValue)) {
+        ob.setCurrValue(String(ob.calcValue));
+      } else {
+        ob.setCurrValue(INVALID_RESULT);
+      }
+    }
+  }
+
+  render() {
+    let btnArea = document.getElementById('button-area');
+    let btnDiv = document.createElement('div');
+    btnDiv.classList.add('button');
+    btnDiv.innerHTML = this.key;
+    btnDiv.onclick = this.onKeyClick.bind(this);
+    btnArea.appendChild(btnDiv);
+  }
+}
+
+// 数字按键
+class NumButton extends MyButton {
+  constructor(key) {
+    super(key);
+  }
+
+  onKeyClick() {
+    super.onKeyClick();
+  }
+
+  keyPress() {
+    // 如果上一次是求值、加减乘除、%操作
+    let tempValue = /[+\-x÷%=]/.test(lastKey) || ob.getCurrValue() === '0' ? this.key : ob.getCurrValue() + this.key;
+    // 如果上一次是%操作，则从expArr弹出最后一个元素，这里是模拟win10计算器的操作
+    if (lastKey === '%') {
+      ob.getExpArr().pop();
+    }
+    // 小数点默认补齐为0.
+    if (tempValue === '.') {
+      tempValue = '0.';
+    }
+    // 如果拼接后的字符是合法的数值，那就赋值
+    if (/^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/.test(tempValue)) {
+      ob.setCurrValue(tempValue);
+    }
+  }
+
+}
+
+// 处理加减乘除
+class OperatorButton extends MyButton {
+  constructor(key) {
+    super(key);
+  }
+
+  onKeyClick() {
+    super.onKeyClick();
+  }
+
+  keyPress() {
+    const arr = ob.getExpArr();
+    if (operatorRegExp.test(lastKey)) {
+      if (lastKey !== this.key) {//不同的时候才需要替换
+        arr.pop();
+        arr.push(this.key);
+      }
+    } else {
+      // 如果已经按过等号按键了，需要重置
+      if (arr.includes('=')) {
+        arr.clear();
+        ob.calcValue = '';
+      }
+      // 以小数点结尾的，删除小数点
+      if (ob.getCurrValue().endsWith('.')) {
+        ob.setCurrValue(ob.getCurrValue().slice(0, -1));
+      }
+      // 将当前显示值和操作符压入表达式数组
+      // 按%键时，已经将currValue压入expArr了，所以这里不用在压入了
+      (lastKey !== '%') && arr.push(ob.getCurrValue() || '0');
+      // 尝试计算结果
+      this.doEval();
+      arr.push(this.key);
+    }
+  }
+}
+
+// 处理功能按键按键
+class FunctionButton extends MyButton {
+  constructor(key) {
+    super(key);
+  }
+
+  onKeyClick() {
+    super.onKeyClick();
+  }
+
+  keyPress() {
+    if (this.key === 'C') {//重置键
+      ob.reset();
+    } else if (this.key === '=') {//=键
+      this.onEqualsClick();
+    } else if (this.key === '±') {
+      // 处理 正负 按键
+      if (ob.getCurrValue().startsWith('-')) {
+        ob.setCurrValue(ob.getCurrValue().slice(1));
+      } else if (ob.getCurrValue() && ob.getCurrValue() !== '0') {
+        ob.setCurrValue('-' + ob.getCurrValue());
+      }
+    } else if (this.key === '%') {
+      this.onPercentClick();
+    } else if (this.key === 'CE') {
+      if (ob.getExpArr().includes('=')) {
+        ob.reset();
+      } else {
+        ob.setCurrValue('0');
+      }
+    }
+  }
+
+  // 处理等号按钮
+  onEqualsClick() {
+    const arr = ob.getExpArr();
+    const len = arr.length;
+    // 处理直接=号开始的情况，或者9=9这种特殊情况
+    if (len === 0 || arr[1] === '=') {
+      arr.clear();
+      if (ob.getCurrValue() && ob.getCurrValue().endsWith('.')) {
+        ob.setCurrValue(ob.getCurrValue().slice(0, -1));
+      }
+      arr.push(ob.getCurrValue() || '0');
+    } else if (arr.includes('=')) {
+      //如果已经按过=号键了,expArr是['x1','*','x2','=']这样的结构
+      let lastOper = arr[len - 3];//上次计算的运算符
+      let lastNum = arr[len - 2];// 上次计算的右侧数值
+      arr.clear();
+      ob.calcValue = '';
+      // 重新压入expArr
+      arr.push(ob.getCurrValue() || '0', lastOper, lastNum);
+      this.doEval();
+    } else {
+      // 直接将当前显示的值压入expArr，然后计算，并添加=
+      // 按%键时，已经将currValue压入expArr了，所以这里不用在压入了
+      (lastKey !== '%') && arr.push(ob.getCurrValue() || '0');
+      this.doEval();
+    }
+    arr.push('=');
+    this.addHistory();
+  }
+
+  // 处理%按键
+  onPercentClick() {
+    const arr = ob.getExpArr();
+    const len = arr.length;
+    // 处理%操作
+    if (len === 0) {
+      ob.reset();
+    } else if (lastKey === '%' || arr.includes('=')) {
+      // 按过=键或%之后
+      ob.setCurrValue(String(Number(ob.getCurrValue()) * 0.01));
+      arr.clear();
+      arr.push(ob.getCurrValue());
+    } else {
+      let oper = arr[len - 1];
+      if (oper === '+' || oper === '-') {
+        ob.setCurrValue(String(Number(arr[len - 2]) * Number(ob.getCurrValue()) * 0.01));
+      } else {
+        ob.setCurrValue(String(Number(ob.getCurrValue()) * 0.01));
+      }
+      arr.push(ob.getCurrValue());
+    }
+  }
+
+  addHistory() {
+    let div1 = document.createElement('div');
+    div1.classList.add('history-expression');
+    div1.innerHTML = ob.getExpArr().join('');
+    let div2 = document.createElement('div');
+    div2.classList.add('history-result');
+    div2.innerHTML = ob.getCurrValue();
+    let historyListElem = document.querySelector('.history-list');
+    historyListElem.insertBefore(div2, historyListElem.firstElementChild);
+    historyListElem.insertBefore(div1, historyListElem.firstElementChild);
+  }
+
+}
+
+const keys = ['%', 'CE', 'C', '÷', '7', '8', '9', 'x', '4', '5', '6', '-', '1', '2', '3', '+', '±', '0', '.', '='];
+
+keys.forEach(key => {
+  if (numRegExp.test(key)) {
+    new NumButton(key).render();
+  } else if (operatorRegExp.test(key)) {
+    new OperatorButton(key).render();
+  } else {
+    new FunctionButton(key).render();
+  }
+});
+
+
+</script>
 </body>
 
 </html>
