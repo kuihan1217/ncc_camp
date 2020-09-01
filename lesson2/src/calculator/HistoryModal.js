@@ -51,6 +51,7 @@ class HistoryModal extends React.Component {
 	}
 
 	handleSelect(eventKey) {
+		this.clear();
 		this.setState({
 			activePage: eventKey
 		});

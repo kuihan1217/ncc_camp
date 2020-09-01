@@ -20,15 +20,18 @@ class Calculator extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			currValue: '0',
-			calcValue: '',
-			expression: [],
-			calcHistory: [],
-			lastKey: '',
-			showModal: false
+			currValue: '0',// 当前值
+			calcValue: '',// 计算值
+			expression: [],// 表达式
+			calcHistory: [],// 计算历史
+			lastKey: '',// 上一次按键
+			showModal: false// 弹窗
 		};
 	}
 
+	/**
+	 * 重置计算器
+	 */
 	resetCalculator() {
 		this.setState({
 			calcValue: '',
@@ -37,6 +40,10 @@ class Calculator extends React.Component {
 		});
 	}
 
+	/**
+	 * 删除历史记录
+	 * @param ids
+	 */
 	delHistory(ids) {
 		if (ids && ids.length) {
 			let calcHistory = JSON.parse(JSON.stringify(this.state.calcHistory));
@@ -45,6 +52,10 @@ class Calculator extends React.Component {
 		}
 	}
 
+	/**
+	 * 点击事件回调
+	 * @param keyType
+	 */
 	onKeyClick(keyType) {
 		this.onBeforeClick().then(
 			() => {
@@ -65,6 +76,10 @@ class Calculator extends React.Component {
 	}
 
 
+	/**
+	 * 点击前事件
+	 * @returns {Promise<unknown>}
+	 */
 	onBeforeClick = async () => {
 		return new Promise((resolve, reject) => {
 			if (this.state.currValue !== INVALID_RESULT) {
@@ -75,6 +90,10 @@ class Calculator extends React.Component {
 		});
 	};
 
+	/**
+	 * 点击后事件
+	 * @param keyType
+	 */
 	onAfterClick(keyType) {
 		this.setState({
 			lastKey: (keyType === 'CE') ? '0' : keyType
@@ -90,6 +109,10 @@ class Calculator extends React.Component {
 		}
 	}
 
+	/**
+	 * 数字键
+	 * @param keyType
+	 */
 	numKeyPress(keyType) {
 		// 如果上一次是求值、加减乘除、%操作
 		const {lastKey, currValue} = this.state;
@@ -110,6 +133,10 @@ class Calculator extends React.Component {
 		}
 	}
 
+	/**
+	 * 操作符
+	 * @param keyType
+	 */
 	operationKeyPress(keyType) {
 		const {lastKey, currValue} = this.state;
 		const expression = [...this.state.expression];
@@ -141,6 +168,10 @@ class Calculator extends React.Component {
 		}
 	}
 
+	/**
+	 * 功能键
+	 * @param keyType
+	 */
 	functionKeyPress(keyType) {
 		if (keyType === 'C') {//重置键
 			this.resetCalculator();
