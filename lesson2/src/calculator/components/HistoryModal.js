@@ -14,6 +14,7 @@ import {
 	Pagination
 } from 'tinper-bee';
 import multiSelect from 'bee-table/build/lib/multiSelect';
+import { deepClone } from '../utils';
 
 const MultiSelectTable = multiSelect(Table, Checkbox);
 const FormItem = Form.FormItem;
@@ -50,10 +51,10 @@ class HistoryModal extends React.Component {
 		};
 	}
 
-	handleSelect(eventKey) {
+	handleSelect(activePage) {
 		this.clear();
 		this.setState({
-			activePage: eventKey
+			activePage
 		});
 	}
 
@@ -61,12 +62,12 @@ class HistoryModal extends React.Component {
 		let {tableData} = this.state;
 		tableData.forEach(item => item._checked = false);
 		this.setState({
-			tableData: this.deepClone(tableData)
+			tableData: deepClone(tableData)
 		});
 	};
 
 	onSearch() {
-		let tableData = [...this.state.cacheData];
+		let tableData = deepClone(this.state.cacheData);
 		const searchText = this.props.form.getFieldValue('searchText');
 		const searchType = this.props.form.getFieldValue('searchType');
 		if (searchText) {
@@ -92,7 +93,7 @@ class HistoryModal extends React.Component {
 	}
 
 	getSelectedDataFunc(data) {
-		const tableData = this.deepClone(this.state.tableData);
+		const tableData = deepClone(this.state.tableData);
 		for (let item of tableData) {
 			let checkFlag = false;
 			for (let checkedItem of data) {
@@ -112,7 +113,7 @@ class HistoryModal extends React.Component {
 
 	onShowModal() {
 		this.onFormReset();
-		const data = this.deepClone(this.props.calcHistory);
+		const data = deepClone(this.props.calcHistory);
 		this.setState({
 			cacheData: data,
 			tableData: data,
@@ -127,9 +128,6 @@ class HistoryModal extends React.Component {
 		delHistory([...this.state.delIds]);
 	}
 
-	deepClone(item) {
-		return JSON.parse(JSON.stringify(item));
-	}
 
 	onDelHistory() {
 		const ids = [];
@@ -143,10 +141,9 @@ class HistoryModal extends React.Component {
 				title: '确定要删除已选择的记录吗？',
 				content: '删除后将不能恢复。',
 				onOk: () => {
-					const delIds = [...this.state.delIds];
-					delIds.push(...ids);
-					let tableData = this.deepClone(this.state.tableData);
-					let cacheData = this.deepClone(this.state.cacheData);
+					const delIds = [...this.state.delIds, ...ids];
+					let tableData = deepClone(this.state.tableData);
+					let cacheData = deepClone(this.state.cacheData);
 					tableData = tableData.filter(item => !ids.includes(item.id));
 					cacheData = cacheData.filter(v => !delIds.includes(v.id));
 					this.setState({

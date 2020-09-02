@@ -1,13 +1,16 @@
 import { observable, action } from 'mobx';
 import BigNumber from 'bignumber.js';
-
+import { configure } from 'mobx';
 // 加减乘除求余正在表达式
 const operatorRegExp = /[+\-x÷]/;
 const numRegExp = /[0-9.]/;
 const INVALID_RESULT = 'invalid result';
+configure({enforceActions: 'observed'});
 
+let _calcValue = '';
+let _lastKey = '';
 
-class MyStore {
+class CalcStore {
 	@observable currValue = '0';
 	@observable calcValue = '';
 	@observable expression = [];
@@ -15,11 +18,37 @@ class MyStore {
 	@observable lastKey = '';
 	@observable showModal = false;
 
-	@action showHideModal(){
-		this.showModal = !this.showModal;
+	get calcValue() {
+		return _calcValue;
 	}
-	
-	@action doKeyPress(keyType) {
+
+	get lastKey() {
+		return _lastKey;
+	}
+
+	@action delHistory = (ids) => {
+		if (ids && ids.length) {
+			this.calcHistory = this.calcHistory.filter(item => !ids.includes(item.id));
+		}
+	};
+
+	@action showHideModal = () => {
+		this.showModal = !this.showModal;
+	};
+
+	setLastKey(newValue) {
+		_lastKey = newValue;
+	}
+
+	@action pushHistory = () => {
+		this.calcHistory.push({
+			expression: this.expression.join(''),
+			result: this.currValue,
+			id: Math.random().toString(16).slice(2)
+		});
+	};
+
+	@action doKeyPress = (keyType) => {
 		if (numRegExp.test(keyType)) {
 			this.numKeyPress(keyType);
 		} else if (operatorRegExp.test(keyType)) {
@@ -27,12 +56,13 @@ class MyStore {
 		} else {
 			this.functionKeyPress(keyType);
 		}
-	}
+	};
+
 	/**
 	 * 重置计算器
 	 */
 	@action doReset() {
-		this.calcValue = '';
+		_calcValue = '';
 		this.expression = [];
 		this.currValue = '';
 	}
@@ -43,9 +73,9 @@ class MyStore {
 	 */
 	numKeyPress(keyType) {
 		// 如果上一次是求值、加减乘除、%操作
-		let tempValue = /[+\-x÷%=]/.test(this.lastKey) || this.currValue === '0' ? keyType : this.currValue + keyType;
+		let tempValue = /[+\-x÷%=]/.test(_lastKey) || this.currValue === '0' ? keyType : this.currValue + keyType;
 		// 如果上一次是%操作，则从expression弹出最后一个元素，这里是模拟win10计算器的操作
-		if (this.lastKey === '%') {
+		if (_lastKey === '%') {
 			this.expression.pop();
 		}
 		// 小数点默认补齐为0.
@@ -63,15 +93,15 @@ class MyStore {
 	 * @param keyType
 	 */
 	operationKeyPress(keyType) {
-		if (operatorRegExp.test(this.lastKey)) {
-			if (this.lastKey !== keyType) {//不同的时候才需要替换
+		if (operatorRegExp.test(_lastKey)) {
+			if (_lastKey !== keyType) {//不同的时候才需要替换
 				this.expression.splice(this.expression.length - 1, 1, keyType);
 			}
 		} else {
 			// 如果已经按过等号按键了，需要重置
 			if (this.expression.includes('=')) {
 				this.expression = [];
-				this.calcValue = '';
+				_calcValue = '';
 			}
 			// 以小数点结尾的，删除小数点
 			if (this.currValue.endsWith('.')) {
@@ -79,7 +109,7 @@ class MyStore {
 			}
 			// 将当前显示值和操作符压入表达式数组
 			// 按%键时，已经将currValue压入expression了，所以这里不用在压入了
-			if (this.lastKey !== '%') {
+			if (_lastKey !== '%') {
 				this.expression.push(this.currValue || '0');
 			}
 			// 尝试计算结果
@@ -137,7 +167,7 @@ class MyStore {
 		} else {
 			// 直接将当前显示的值压入expression，然后计算，并添加=
 			// 按%键时，已经将currValue压入expression了，所以这里不用在压入了
-			if (this.lastKey !== '%') {
+			if (_lastKey !== '%') {
 				this.expression.push(this.currValue || '0');
 			}
 			this.doEval();
@@ -153,7 +183,7 @@ class MyStore {
 			this.doReset();
 		} else {
 			let tempValue;
-			if (this.lastKey === '%' || this.expression.includes('=')) {
+			if (_lastKey === '%' || this.expression.includes('=')) {
 				// 按过=键或%之后
 				tempValue = new BigNumber(this.currValue).multipliedBy(0.01).toString();
 				this.expression = [];
@@ -179,8 +209,8 @@ class MyStore {
 			let oper = this.expression[len - 2];
 			let op2 = Number(this.expression[len - 1]);
 			// 如果上次计算的结果是number类型
-			if (typeof this.calcValue === 'number') {
-				op1 = this.calcValue;
+			if (typeof _calcValue === 'number') {
+				op1 = _calcValue;
 			}
 			let tempCalcValue;
 			switch (oper) {
@@ -199,11 +229,10 @@ class MyStore {
 				default:
 					return;
 			}
-			this.calcValue = tempCalcValue;
+			_calcValue = tempCalcValue;
 			this.currValue = isFinite(tempCalcValue) ? String(tempCalcValue) : INVALID_RESULT;
 		}
 	}
-
 }
 
-export default MyStore;
+export default new CalcStore();

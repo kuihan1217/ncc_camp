@@ -14,6 +14,8 @@ import {
 	Pagination
 } from 'tinper-bee';
 import multiSelect from 'bee-table/build/lib/multiSelect';
+import { observer, inject } from 'mobx-react';
+
 
 const MultiSelectTable = multiSelect(Table, Checkbox);
 const FormItem = Form.FormItem;
@@ -37,6 +39,8 @@ const columns = [
 /**
  * 弹窗显示历史记录
  */
+@inject('calcStore')
+@observer
 class HistoryModal extends React.Component {
 	constructor(props) {
 		super(props);
@@ -112,7 +116,7 @@ class HistoryModal extends React.Component {
 
 	onShowModal() {
 		this.onFormReset();
-		const data = this.deepClone(this.props.calcHistory);
+		const data = this.deepClone(this.props.calcStore.calcHistory);
 		this.setState({
 			cacheData: data,
 			tableData: data,
@@ -122,7 +126,7 @@ class HistoryModal extends React.Component {
 	}
 
 	onHideModal() {
-		const {showHideModal, delHistory} = this.props;
+		const {showHideModal, delHistory} = this.props.calcStore;
 		showHideModal();
 		delHistory([...this.state.delIds]);
 	}
@@ -165,7 +169,7 @@ class HistoryModal extends React.Component {
 		let multiObj = {
 			type: 'checkbox'
 		};
-		const {showModal} = this.props;
+		const {showModal} = this.props.calcStore;
 		const pageStart = (this.state.activePage - 1) * 8;
 		let data = this.state.tableData.slice(pageStart, pageStart + 8);
 		return (

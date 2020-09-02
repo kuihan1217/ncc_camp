@@ -2,13 +2,12 @@ import React from 'react';
 import 'tinper-bee/assets/tinper-bee.css';
 import Calculator from './calculator/Calculator';
 import './App.css';
-import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
-import myStore from './mobx/MyStore';
+import calcStore from './store/CalcStore';
 
 function App() {
 	return (
-		<Provider myStore={myStore}>
+		<Provider calcStore={calcStore}>
 			<div className="app">
 				<Calculator/>
 			</div>
@@ -16,7 +15,4 @@ function App() {
 	);
 }
 
-configure({
-	enforceActions: true
-});
 export default App;
