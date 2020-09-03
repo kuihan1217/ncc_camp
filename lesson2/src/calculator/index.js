@@ -5,6 +5,7 @@ import HistoryPanel from './components/HistoryPanel';
 import HistoryModal from './components/HistoryModal';
 import { Panel } from 'tinper-bee';
 import { calculate, pushHistory } from './functions/CalcSim';
+import { deepClone } from './utils';
 
 const keyTypes = ['%', 'CE', 'C', '÷', '7', '8', '9', 'x', '4', '5', '6', '-', '1', '2', '3', '+', '±', '0', '.', '='];
 // 加减乘除求余正在表达式
@@ -27,14 +28,13 @@ class Calculator extends React.Component {
 		};
 	}
 
-
 	/**
 	 * 删除历史记录
 	 * @param ids
 	 */
 	delHistory(ids) {
 		if (ids && ids.length) {
-			let calcHistory = JSON.parse(JSON.stringify(this.state.calcHistory));
+			let calcHistory = deepClone(this.state.calcHistory);
 			calcHistory = calcHistory.filter(item => !ids.includes(item.id));
 			this.setState({calcHistory});
 		}

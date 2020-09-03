@@ -3,17 +3,21 @@ import { deepClone } from '../utils';
 
 /**
  * calculator simulation
- *
- * @param currValue
- * @param calcValue
- * @param expression
- * @param lastKey
  */
 // 加减乘除求余正在表达式
 const operatorRegExp = /[+\-x÷]/;
 const numRegExp = /[0-9.]/;
 const INVALID_RESULT = 'invalid result';
 
+/**
+ *  计算
+ * @param keyType
+ * @param currValue
+ * @param calcValue
+ * @param expression
+ * @param lastKey
+ * @returns {{expression: *[], currValue: string, calcValue: string}}
+ */
 export function calculate(keyType, {currValue, calcValue, expression, lastKey} = {
 	currValue: '0',
 	calcValue: '',
@@ -22,11 +26,11 @@ export function calculate(keyType, {currValue, calcValue, expression, lastKey} =
 }) {
 	expression = [...expression];
 	if (numRegExp.test(keyType)) {
-		numKeyPress();
+		doNumberKey();
 	} else if (operatorRegExp.test(keyType)) {
-		operationKeyPress();
+		doOperationKey();
 	} else {
-		functionKeyPress();
+		doFunctionKey();
 	}
 	return {
 		expression,
@@ -37,7 +41,7 @@ export function calculate(keyType, {currValue, calcValue, expression, lastKey} =
 	/**
 	 * 数字键
 	 */
-	function numKeyPress() {
+	function doNumberKey() {
 		// 如果上一次是求值、加减乘除、%操作
 		let tempValue = /[+\-x÷%=]/.test(lastKey) || currValue === '0' ? keyType : currValue + keyType;
 		// 如果上一次是%操作，则从expression弹出最后一个元素，这里是模拟win10计算器的操作
@@ -57,12 +61,9 @@ export function calculate(keyType, {currValue, calcValue, expression, lastKey} =
 	/**
 	 * 操作符
 	 */
-	function operationKeyPress() {
+	function doOperationKey() {
 		if (operatorRegExp.test(lastKey)) {
-			if (lastKey !== keyType) {//不同的时候才需要替换
-				expression.pop();
-				expression.push(keyType);
-			}
+			expression[expression.length - 1] = keyType;
 		} else {
 			// 如果已经按过等号按键了，需要重置
 			if (expression.includes('=')) {
@@ -75,9 +76,7 @@ export function calculate(keyType, {currValue, calcValue, expression, lastKey} =
 			}
 			// 将当前显示值和操作符压入表达式数组
 			// 按%键时，已经将currValue压入expression了，所以这里不用在压入了
-			if (lastKey !== '%') {
-				expression.push(currValue || '0');
-			}
+			(lastKey !== '%') && expression.push(currValue || '0');
 			// 尝试计算结果
 			doCalculate();
 			expression.push(keyType);
@@ -87,11 +86,11 @@ export function calculate(keyType, {currValue, calcValue, expression, lastKey} =
 	/**
 	 * 功能键
 	 */
-	function functionKeyPress() {
+	function doFunctionKey() {
 		if (keyType === 'C') {//重置键
 			doReset();
 		} else if (keyType === '=') {//=键
-			onEqualsClick();
+			doEqualsKey();
 		} else if (keyType === '±') {
 			// 处理 正负 按键
 			if (currValue.startsWith('-')) {
@@ -100,7 +99,7 @@ export function calculate(keyType, {currValue, calcValue, expression, lastKey} =
 				currValue = '-' + currValue;
 			}
 		} else if (keyType === '%') {
-			onPercentClick();
+			doPercentKey();
 		} else if (keyType === 'CE') {
 			if (expression.includes('=')) {
 				doReset();
@@ -111,7 +110,7 @@ export function calculate(keyType, {currValue, calcValue, expression, lastKey} =
 	}
 
 	// 处理等号按钮
-	function onEqualsClick() {
+	function doEqualsKey() {
 		const len = expression.length;
 		// 处理直接=号开始的情况，或者9=9这种特殊情况
 		if (len === 0 || expression[1] === '=') {
@@ -124,9 +123,8 @@ export function calculate(keyType, {currValue, calcValue, expression, lastKey} =
 			//如果已经按过=号键了,expression是['x1','*','x2','=']这样的结构
 			let lastOper = expression[len - 3];//上次计算的运算符
 			let lastNum = expression[len - 2];// 上次计算的右侧数值
-			expression = [];
 			// 重新压入expression
-			expression.push(currValue || '0', lastOper, lastNum);
+			expression = [currValue || '0', lastOper, lastNum];
 			doCalculate();
 		} else {
 			// 直接将当前显示的值压入expression，然后计算，并添加=
@@ -138,26 +136,25 @@ export function calculate(keyType, {currValue, calcValue, expression, lastKey} =
 	}
 
 	// 处理%按键
-	function onPercentClick() {
+	function doPercentKey() {
 		const len = expression.length;
 		// 处理%操作
 		if (len === 0) {
 			doReset();
 		} else {
-			let tempValue;
 			if (lastKey === '%' || expression.includes('=')) {
 				// 按过=键或%之后
-				tempValue = new BigNumber(currValue).multipliedBy(0.01).toString();
-				expression = [];
+				expression = [new BigNumber(currValue).multipliedBy(0.01).toString()];
 			} else {
 				let oper = expression[len - 1];
+				let tempValue;
 				if (oper === '+' || oper === '-') {
 					tempValue = new BigNumber(expression[len - 2]).multipliedBy(currValue).multipliedBy(0.01).toString();
 				} else {
 					tempValue = new BigNumber(currValue).multipliedBy(0.01).toString();
 				}
+				expression.push(tempValue);
 			}
-			expression.push(tempValue);
 		}
 	}
 

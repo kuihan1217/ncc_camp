@@ -123,9 +123,8 @@ class HistoryModal extends React.Component {
 	}
 
 	onHideModal() {
-		const {showHideModal, delHistory} = this.props;
-		showHideModal();
-		delHistory([...this.state.delIds]);
+		this.props.showHideModal();
+		this.props.delHistory([...this.state.delIds]);
 	}
 
 
