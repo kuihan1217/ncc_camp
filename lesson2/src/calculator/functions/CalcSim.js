@@ -114,21 +114,20 @@ export function calculate(keyType, {currValue, calcValue, expression, lastKey} =
 		const len = expression.length;
 		// 处理直接=号开始的情况，或者9=9这种特殊情况
 		if (len === 0 || expression[1] === '=') {
-			expression = [];
-			if (currValue && currValue.endsWith('.')) {
-				currValue = currValue.slice(0, -1);
-			}
-			expression.push(currValue || '0');
+			trimEndPoint();
+			expression = [currValue || '0'];
 		} else if (expression.includes('=')) {
 			//如果已经按过=号键了,expression是['x1','*','x2','=']这样的结构
 			let lastOper = expression[len - 3];//上次计算的运算符
 			let lastNum = expression[len - 2];// 上次计算的右侧数值
 			// 重新压入expression
+			trimEndPoint();
 			expression = [currValue || '0', lastOper, lastNum];
 			doCalculate();
 		} else {
 			// 直接将当前显示的值压入expression，然后计算，并添加=
 			// 按%键时，已经将currValue压入expression了，所以这里不用在压入了
+			trimEndPoint();
 			(lastKey !== '%') && expression.push(currValue || '0');
 			doCalculate();
 		}
@@ -196,6 +195,11 @@ export function calculate(keyType, {currValue, calcValue, expression, lastKey} =
 		calcValue = '';
 		expression = [];
 		currValue = '0';
+	}
+	function trimEndPoint() {
+		if (currValue && currValue.endsWith('.')) {
+			currValue = currValue.slice(0, -1);
+		}
 	}
 }
 

@@ -16,12 +16,13 @@ function PadPanel(props) {
 			if (keyType === '=') {
 				className = 'equal-key';
 			}
-			return (<div key={keyType} className="btn-col">
-				<Button className={className}
-								onClick={() => props.onKeyClick(keyType)}>
-					{keyType}
-				</Button>
-			</div>);
+			return (
+				<div key={keyType} className="btn-col">
+					<Button className={className} onClick={() => props.onKeyClick(keyType)}>
+						{keyType}
+					</Button>
+				</div>
+			);
 		})}
 	</div>);
 }
