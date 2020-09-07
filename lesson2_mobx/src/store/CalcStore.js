@@ -12,19 +12,9 @@ let _lastKey = '';
 
 class CalcStore {
 	@observable currValue = '0';
-	@observable calcValue = '';
 	@observable expression = [];
 	@observable calcHistory = [];
-	@observable lastKey = '';
 	@observable showModal = false;
-
-	get calcValue() {
-		return _calcValue;
-	}
-
-	get lastKey() {
-		return _lastKey;
-	}
 
 	@action delHistory = (ids) => {
 		if (ids && ids.length) {

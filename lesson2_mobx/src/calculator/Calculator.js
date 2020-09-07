@@ -62,6 +62,7 @@ class Calculator extends React.Component {
 	}
 
 	render() {
+		console.log(this.props.calcStore);
 		return (
 			<div>
 				<Panel header="Win10 计算器 React 版本">
